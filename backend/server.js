@@ -17,6 +17,7 @@ connectDB();
 
 // Route files 
 const auth = require("./routers/auth");
+const books = require("./routers/books");
 
 
 const app = express();
@@ -24,11 +25,10 @@ const app = express();
 
 app.use(express.json());
 
-// app.use('/', (req,res)=>{
-//     res.send('what the f')
-// })
 
 app.use('/api/v1/auth', auth)
+app.use('/api/v1/books', books)
+
 
 
 app.use(errorHandler);
