@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
+const errorHandler = require('./middleware/error');
 
 // env file
 dotenv.config({path : './backend/config/.env'});
@@ -28,6 +29,10 @@ app.use(express.json());
 // })
 
 app.use('/api/v1/auth', auth)
+
+
+app.use(errorHandler);
+
 
 
 const PORT = process.env.PORT;

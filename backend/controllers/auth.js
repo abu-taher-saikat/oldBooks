@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const asyncHandler = require('../middleware/asyncHandler');
-const ErrorResponse = require('../middleware/error');
+const ErrorResponse = require('../utils/ErrorResponse');
 
 
 // @desc   Register user
@@ -35,16 +35,47 @@ exports.register = asyncHandler(async (req, res, next) => {
 exports.login = asyncHandler(async(req,res, next) => {
     const {email , password } = req.body;
 
-    // Create user
-    const user = User.create({
-        name, email , password, role
-    })
+    // validate email and password
+    if(!email || !password){
+        return next(new ErrorResponse("Please provie an email and password", 401));
+    }
+
+    // Check for user
+    const user = await User.findOne({
+        email : email
+    }).select('+password');
+
+    // if no user
+    if(!user){
+        return next(new ErrorResponse('Invalid credentials', 401))
+    }
+
+    // Check if password matchs 
+    const isMatch = await user.matchPassword(password);
+
+    if(!isMatch){
+        return next(new ErrorResponse('Invalid credentials', 401))
+    }
 
     sendTokenResponse(user, 200, res);
 })
 
 
-// Get token from model , create cookie ans send response
+
+// @desc Get current logged in user
+// @route POST api/v1/auth/me
+// @Public
+exports.getMe = asyncHandler(async(req,res, next) => {
+    console.log(req.user._id);
+    const user = await User.findById(req.user._id);
+    console.log(user);
+    res.status(200).json({
+        success : true,
+        data : user
+    })
+})
+
+
 
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
