@@ -66,9 +66,25 @@ exports.login = asyncHandler(async(req,res, next) => {
 // @route POST api/v1/auth/me
 // @Public
 exports.getMe = asyncHandler(async(req,res, next) => {
-    console.log(req.user._id);
     const user = await User.findById(req.user._id);
     console.log(user);
+    res.status(200).json({
+        success : true,
+        data : user
+    })
+})
+
+
+
+// @desc Update user
+// @route PUT api/v1/auth/:id
+// @access Public/admin
+exports.updateUser = asyncHandler(async(req,res, next) => {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body,{
+        new : true,
+        runValidators : true
+    });
+
     res.status(200).json({
         success : true,
         data : user
