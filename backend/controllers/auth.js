@@ -29,6 +29,9 @@ exports.register = asyncHandler(async (req, res, next) => {
     sendTokenResponse(user, 200, res);
 })
 
+
+
+
 // @desc Login a user
 // @route POST api/v1/auth/login
 // @Public
@@ -76,11 +79,15 @@ exports.getMe = asyncHandler(async(req,res, next) => {
 
 
 
-// @desc Update user
+// @desc Update user details
 // @route PUT api/v1/auth/:id
 // @access Public/admin
+// @imp email shouldn't be update here.
 exports.updateUser = asyncHandler(async(req,res, next) => {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body,{
+    const fieldsToUpdate = {
+        name : req.body.name,
+    }
+    const user = await User.findByIdAndUpdate(req.params.id, fieldsToUpdate,{
         new : true,
         runValidators : true
     });
