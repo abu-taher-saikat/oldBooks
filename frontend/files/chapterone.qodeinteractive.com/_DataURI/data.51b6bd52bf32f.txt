@@ -1,0 +1,1 @@
+chrome-extension://jdbnofccmhefkmjbkkdkfiicjkgofkdh/css/sidebar.css
