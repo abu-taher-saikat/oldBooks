@@ -1,4 +1,6 @@
 import { BrowserRouter as Router } from 'react-router-dom';
+import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
+
 import './App.css';
 import Headers from './Components/Headers';
 
